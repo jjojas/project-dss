@@ -2,7 +2,8 @@
 # It will also search for books that connects between the input
 # @author: Justin Dermawan Ikhsan
 
-import db
+# import db
+from . import db
 from py2neo import Graph, Node, Relationship, NodeMatcher
 
 neo = db.connect_neo()
@@ -57,17 +58,25 @@ def recommend(tagsinput: list,books: list) -> dict:
             for tagfromdb in tagsfromdb:
                 tags.append(tagfromdb[0])
 
-        if any(x in tagsinput for x in tags):
+        if len(tagsinput)>0:
+            if any(x in tagsinput for x in tags):
+                finalrec[recom] = {}
+                finalrec[recom]["id"] = recom
+                finalrec[recom]["title"] = title
+                finalrec[recom]["author"] = author
+                finalrec[recom]["tags"] = tags
+        else:
             finalrec[recom] = {}
             finalrec[recom]["id"] = recom
             finalrec[recom]["title"] = title
             finalrec[recom]["author"] = author
             finalrec[recom]["tags"] = tags
 
+
     return finalrec
 
 if __name__ == "__main__":
-    a  = ['love']
+    a  = []
     b = ["20702993","364","5400850","819161"]
     c = ["364"]
     print(recommend(a,b))
