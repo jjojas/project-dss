@@ -17,14 +17,14 @@ async def root():
 
 @app.get("/tag/{qstring}")
 async def read_tag(qstring: str):
-    return {"Tag" : qstring}
+    return rc.searchTag(qstring)
     raise HTTPException (
         status_code=404, detail=f'Item not found'
     )
 
 @app.get("/book/{qstring}")
 async def read_book(qstring: str):
-    return {"book" : qstring}
+    return rc.searchName(qstring)
     raise HTTPException (
         status_code=404, detail=f'Item not found'
     )

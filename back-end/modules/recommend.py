@@ -3,11 +3,27 @@
 # @author: Justin Dermawan Ikhsan
 
 # import db
+import re
 from . import db
+import json
 from py2neo import Graph, Node, Relationship, NodeMatcher
 
 neo = db.connect_neo()
-psql = db.connect_psql()
+# psql = db.connect_psql()
+
+tagDump = []
+titleDump = []
+idDump = []
+booksDump = {}
+with open("modules/book_data.json","r", encoding="utf8") as read_file:
+    booksDump = json.load(read_file)
+
+for book in booksDump:
+    idDump.append(book)
+    titleDump.append(booksDump[book]['title'])
+    for tag in booksDump[book]['tags']:
+        if tag not in tagDump:
+            tagDump.append(tag)
 
 def recommend(tagsinput: list,books: list) -> dict:
     '''
@@ -36,47 +52,62 @@ def recommend(tagsinput: list,books: list) -> dict:
             q+="nodes(path"+str(i+1)+"),"
         q = q[:-1]
         a = neo.run(q).data()
-        for key in a[0] :
-            for node in a[0][key]:
-                recomlist.append(node['id'])
+        if len(a)>0:
+            for key in a[0] :
+                for node in a[0][key]:
+                    recomlist.append(node['id'])
 
-    else:
+    elif len(books)==1:
         q ="MATCH (a:Book {id: '" + books[0] + "' })-[r:RECOMMEND]-(b) RETURN b"
         a = neo.run(q).data()
         for key in a :
             recomlist.append(key["b"]["id"])
+
+    else:
+        for book in booksDump:
+            if any(x in tagsinput for x in booksDump[book]["tags"]):
+                recomlist.append(book)
     
     finalrec = {}
     for recom in recomlist:
-        titlefromdb = db.books_get_title(psql,recom)
-        title = titlefromdb[0][0].replace("-"," ")
-        author = titlefromdb[0][1]
-
-        tagsfromdb = db.books_get_tags(psql,recom)
-        tags = []
-        if len(tagsfromdb) > 0 :
-            for tagfromdb in tagsfromdb:
-                tags.append(tagfromdb[0])
-
         if len(tagsinput)>0:
-            if any(x in tagsinput for x in tags):
-                finalrec[recom] = {}
-                finalrec[recom]["id"] = recom
-                finalrec[recom]["title"] = title
-                finalrec[recom]["author"] = author
-                finalrec[recom]["tags"] = tags
+            if any(x in tagsinput for x in booksDump[recom]["tags"]):
+                finalrec[recom] = booksDump[recom]
         else:
-            finalrec[recom] = {}
-            finalrec[recom]["id"] = recom
-            finalrec[recom]["title"] = title
-            finalrec[recom]["author"] = author
-            finalrec[recom]["tags"] = tags
-
+            finalrec[recom] = booksDump[recom]
 
     return finalrec
 
+def searchTag(q: str) -> list:
+    r = re.compile(f".*{q}")
+    tags = list(filter(r.match, tagDump))
+    return tags[:10]
+
+def searchName(q: str) -> list:
+    d = []
+    r = re.compile(f".*{q}")
+    titles = list(filter(r.match, titleDump))
+    for title in titles:
+        id = searchIDfromName(title)
+        item = {}
+        item['id'] = id
+        item['name'] = title
+        d.append(item)
+    return d[:10]
+
+def searchIDfromName(q: str) -> str:
+    if q in titleDump:
+        return titleDump.index(q)
+    else:
+        return ''
+
 if __name__ == "__main__":
-    a  = []
-    b = ["20702993","364","5400850","819161"]
-    c = ["364"]
-    print(recommend(a,b))
+    a  = ['love','classics']
+    b1 = []
+    b2 = ["20702993","5400850","819161"]
+    c3 = ["364"]
+    # print(recommend(b1,b2))
+    # print(recommend(a,b1))
+    # print(recommend(b1,c3))
+    # print(recommend(a,c3))
+    print(searchName("to"))

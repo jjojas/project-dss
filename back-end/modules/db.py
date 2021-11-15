@@ -14,6 +14,11 @@ def connect_psql():
         password="123456")
     return conn
 
+def uniqueBook(db):
+    cur = db.cursor()
+    cur.execute(f"((select distinct origin as o from recommend) union (select distinct recom from recommend));")
+    return cur.fetchall()
+
 def get(db,table):
     cur = db.cursor()
     cur.execute(f"SELECT * FROM {table};")
