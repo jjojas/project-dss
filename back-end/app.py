@@ -29,7 +29,7 @@ async def read_book(qstring: str):
         status_code=404, detail=f'Item not found'
     )
 
-@app.get("/recommend")
+@app.post("/recommend")
 async def get_recommendation(tags: List, books:List):
     return rc.recommend(tags,books)
     raise HTTPException (
