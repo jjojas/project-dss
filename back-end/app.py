@@ -29,8 +29,8 @@ async def read_book(qstring: str):
         status_code=404, detail=f'Item not found'
     )
 
-@app.post("/recommend")
-async def add_menu(tags: List, books:List):
+@app.get("/recommend")
+async def get_recommendation(tags: List, books:List):
     return rc.recommend(tags,books)
     raise HTTPException (
         status_code=404, detail=f'Item not found'
