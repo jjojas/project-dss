@@ -18,15 +18,24 @@ def populate(data: list) -> dict:
 
         tagsfromdb = db.books_get_tags(psql,recom)
         tags = []
+
         if len(tagsfromdb) > 0 :
             for tagfromdb in tagsfromdb:
                 tags.append(tagfromdb[0])
-
+        
+        recoms = []
+        recomfromdb = db.books_get_recom(psql,recom)
+        if len(recomfromdb) > 0 :
+                    for recomA in recomfromdb:
+                        recoms.append(recomA[0])
+    
         finalrec[recom] = {}
         finalrec[recom]["id"] = recom
         finalrec[recom]["title"] = title
         finalrec[recom]["author"] = author
         finalrec[recom]["tags"] = tags
+        finalrec[recom]["recommend"] = recoms
+
     return finalrec
 
 l = []
@@ -34,3 +43,5 @@ for data in db.uniqueBook(psql):
     l.append(data[0])
 books = populate(l)
 output()
+
+    

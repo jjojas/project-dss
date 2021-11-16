@@ -4,11 +4,12 @@
 
 # import db
 import re
-from . import db
+from . import dijkstra as d
+# from . import db
 import json
-from py2neo import Graph, Node, Relationship, NodeMatcher
+# from py2neo import Graph, Node, Relationship, NodeMatcher
 
-neo = db.connect_neo()
+# neo = db.connect_neo()
 # psql = db.connect_psql()
 
 tagDump = []
@@ -36,32 +37,51 @@ def recommend(tagsinput: list,books: list) -> dict:
     '''
 
     recomlist = []
-    if len(books)>1:
-        q = "MATCH "
-        for i in range(len(books)):
-            q+="(" + chr(97+i) + ":Book {id: '" + books[i] + "'}),"
-        ct = 0
+    if len(books)>3:
+        spath = []
         for i in range(len(books)):
             for j in range(len(books)):
                 if i>j:
-                    ct+=1
-                    q+="path" + str(ct) + "=shortestPath((" + chr(97+i) + ")-[:RECOMMEND*]-(" + chr(97+j) + ")),"
-        q = q[:-1]
-        q+=" RETURN "
-        for i in range(ct):
-            q+="nodes(path"+str(i+1)+"),"
-        q = q[:-1]
-        a = neo.run(q).data()
-        if len(a)>0:
-            for key in a[0] :
-                for node in a[0][key]:
-                    recomlist.append(node['id'])
+                    for item in d.ShortestPath(booksDump,books[i],books[j]):
+                        spath.append(item)
+        max = -1
+        for item in list(set(spath)):
+            if (spath.count(item))>max:
+                max = spath.count(item)
+        for item in list(set(spath)):
+            if (spath.count(item))>=max-1:
+                recomlist.append(item)
+    elif len(books)>1:
+        spath = []
+        for i in range(len(books)):
+            for j in range(len(books)):
+                if i>j:
+                    for item in d.ShortestPath(booksDump,books[i],books[j]):
+                        spath.append(item)
+        for item in list(set(spath)):
+            recomlist.append(item)
+        # q = "MATCH "
+        # for i in range(len(books)):
+        #     q+="(" + chr(97+i) + ":Book {id: '" + books[i] + "'}),"
+        # ct = 0
+        # for i in range(len(books)):
+        #     for j in range(len(books)):
+        #         if i>j:
+        #             ct+=1
+        #             q+="path" + str(ct) + "=shortestPath((" + chr(97+i) + ")-[:RECOMMEND*]-(" + chr(97+j) + ")),"
+        # q = q[:-1]
+        # q+=" RETURN "
+        # for i in range(ct):
+        #     q+="nodes(path"+str(i+1)+"),"
+        # q = q[:-1]
+        # a = neo.run(q).data()
+        # if len(a)>0:
+        #     for key in a[0] :
+        #         for node in a[0][key]:
+        #             recomlist.append(node['id'])
 
     elif len(books)==1:
-        q ="MATCH (a:Book {id: '" + books[0] + "' })-[r:RECOMMEND]-(b) RETURN b"
-        a = neo.run(q).data()
-        for key in a :
-            recomlist.append(key["b"]["id"])
+        recomlist.append(books[0]["recommend"])
 
     else:
         for book in booksDump:
@@ -106,8 +126,8 @@ if __name__ == "__main__":
     b1 = []
     b2 = ["20702993","5400850","819161"]
     c3 = ["364"]
-    # print(recommend(b1,b2))
+    print(recommend(b1,b2))
     # print(recommend(a,b1))
     # print(recommend(b1,c3))
     # print(recommend(a,c3))
-    print(searchName("to"))
+    # print(searchName("to"))
