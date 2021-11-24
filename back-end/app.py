@@ -15,6 +15,20 @@ class Book(BaseModel):
 async def root():
     return {"Hello" : "World"}
 
+@app.get("/tag/")
+async def read_all_tag():
+    return rc.AllTag()
+    raise HTTPException (
+        status_code=404, detail=f'Item not found'
+    )
+
+@app.get("/book/")
+async def read_all_book():
+    return rc.AllBook()
+    raise HTTPException (
+        status_code=404, detail=f'Item not found'
+    )
+
 @app.get("/tag/{qstring}")
 async def read_tag(qstring: str):
     return rc.searchTag(qstring)
