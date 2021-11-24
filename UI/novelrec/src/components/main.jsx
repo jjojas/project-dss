@@ -9,6 +9,11 @@ class Main  extends React.Component {
         genreNovel : []
     }
 
+    handleSubmit = () => {
+
+        console.log(this.state.genreNovel);
+    }
+
 
     render() { 
         return (
@@ -19,7 +24,7 @@ class Main  extends React.Component {
                 <TagInput tags={[]} placeholder={"ketikkan judul novel"} />
                 <h3 >Masukkan genre novel yang diingingkan :</h3>
                 <TagInput tags={[]} placeholder={"Ketikkan genre novel"} />
-                <Button variant="contained" id="tombol" color="secondary">Cari rekomendasi</Button>
+                <button>Cari rekomendasi</button>
             </form>
         </div>
         );

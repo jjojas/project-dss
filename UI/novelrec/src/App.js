@@ -4,16 +4,21 @@ import Main from './components/main';
 
 
 
-const App = () => {
+class App extends React.Component {
+
+  render() {
   return ( 
     <React.Fragment>
-      <Switch>
-        <Route path="/main" component={Main}></Route>
-        <Route path="/table" component={}></Route>
-        <Redirect from="/" exact to="/main" />
-      </Switch>
+      <main>
+        <Switch>
+          <Route path="/main" component={Main}></Route>
+          <Redirect from="/" exact to="/main" />
+          <Redirect to="/not-found" />
+        </Switch>
+      </main>
     </React.Fragment> 
    );
+  }
 }
  
 export default App;
