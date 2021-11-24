@@ -13,10 +13,10 @@ const TagInput  = (props) => {
             }
         }
 
-        const removeTag = removedTag => {
-            const newTags = tags.filter(tag => tag !== removedTag)
-            setTags(newTags)
-        }
+    const removeTag = removedTag => {
+        const newTags = tags.filter(tag => tag !== removedTag)
+        setTags(newTags)
+    }
 
     return ( 
         <React.Fragment>
