@@ -115,6 +115,21 @@ def searchName(q: str) -> list:
         d.append(item)
     return d[:10]
 
+def AllTag() -> list:
+    return tagDump
+
+def AllBook() -> list:
+    l = []
+    for book in booksDump:
+        ret = {}
+        ret["id"] = booksDump[book]
+        if "title" in booksDump[book]:
+            ret["title"] = booksDump[book]["title"]
+        else:
+            ret["title"] = ""
+        l.append(ret)
+    return l
+
 def searchIDfromName(q: str) -> str:
     if q in titleDump:
         return titleDump.index(q)
@@ -122,10 +137,10 @@ def searchIDfromName(q: str) -> str:
         return ''
 
 if __name__ == "__main__":
-    a  = ['love','classics']
-    b1 = []
-    b2 = ["20702993","5400850","819161"]
-    c3 = ["364"]
+    # a  = ['love','classics']
+    # b1 = []
+    # b2 = ["20702993","5400850","819161"]
+    # c3 = ["364"]
     print(recommend(b1,b2))
     # print(recommend(a,b1))
     # print(recommend(b1,c3))
