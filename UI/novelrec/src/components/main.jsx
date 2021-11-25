@@ -5,26 +5,35 @@ import Button from '@mui/material/Button';
 
 class Main  extends React.Component {
     state = {
-        judulNovel : [],
-        genreNovel : []
+        data: {
+            books: [],
+            tags: []
+        }
     }
 
-    handleSubmit = () => {
-
-        console.log(this.state.genreNovel);
+    handleSubmit = e => {
+        e.preventDefault();
     }
 
+    handleInput(x){
+        const newdata = this.state.data
+        newdata["books"] = x
+        this.setState({
+            data : newdata
+        });
+        alert(this.state.data.books);
+      }
 
     render() { 
         return (
         <div>
             <h1 >Sistem Rekomendasi Novel</h1>
-            <form>
+            <form onSubmit={this.handleSubmit}>
                 <h3 >Masukkan judul novel yang pernah dibaca :</h3>
-                <TagInput tags={[]} placeholder={"ketikkan judul novel"} />
+                <TagInput tags={["Harry potter"]} placeholder={"ketikkan judul novel"} getInput={this.handleInput} />
                 <h3 >Masukkan genre novel yang diingingkan :</h3>
                 <TagInput tags={[]} placeholder={"Ketikkan genre novel"} />
-                <button>Cari rekomendasi</button>
+                <Button id="tombol" variant="contained">Cari rekomendasi</Button>
             </form>
         </div>
         );

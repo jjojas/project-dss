@@ -8,7 +8,8 @@ const TagInput  = (props) => {
         if(e.key === 'Enter') {
             if (e.target.value.length > 0){
                 setTags([...tags, e.target.value])
-                e.target.value = ''
+                e.target.value = '';
+                props.getInput(tags);
             }
             }
         }
@@ -17,6 +18,7 @@ const TagInput  = (props) => {
         const newTags = tags.filter(tag => tag !== removedTag)
         setTags(newTags)
     }
+
 
     return ( 
         <React.Fragment>
@@ -32,7 +34,7 @@ const TagInput  = (props) => {
                    );
                })}
                </ul>
-               <input placeholder={placeholder} onKeyDown={addTag} />
+               <input placeholder={placeholder}  onKeyDown={addTag} />
 
             </div>
 
