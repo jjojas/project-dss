@@ -12,7 +12,8 @@ origins = [
     "https://localhost.tiangolo.com",
     "http://localhost",
     "http://localhost:8080",
-    "https://norecsdss05.netlify.app"
+    "https://norecsdss05.netlify.app",
+    "https://suspicious-goldwasser-e5c8ea.netlify.app"
 ]
 
 app.add_middleware(
