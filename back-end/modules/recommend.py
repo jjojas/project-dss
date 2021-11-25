@@ -99,16 +99,14 @@ def recommend(tagreceived: list,bookreceived: list) -> dict:
             if any(x in tagsinput for x in booksDump[book]["tags"]):
                 recomlist.append(book)
     
-    finalrec = {}
+    finalrec = []
     if len(recomlist)>0:
         for recom in recomlist:
             if len(tagsinput)>0:
                 if any(x in tagsinput for x in booksDump[recom]["tags"]):
-                    finalrec[recom] = booksDump[recom]
+                    finalrec.append(booksDump[recom])
             else:
-                finalrec[recom] = booksDump[recom]
-    else:
-        finalrec["error"] = "No Recommendation Data!"
+                finalrec.append(booksDump[recom])
 
     return finalrec
 
