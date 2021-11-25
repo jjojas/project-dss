@@ -81,7 +81,9 @@ def recommend(tagsinput: list,books: list) -> dict:
         #             recomlist.append(node['id'])
 
     elif len(books)==1:
-        recomlist.append(books[0]["recommend"])
+        if books[0] in booksDump:
+            for recom in booksDump[books[0]]["recommend"]:
+                recomlist.append(recom)
 
     else:
         for book in booksDump:
@@ -89,12 +91,15 @@ def recommend(tagsinput: list,books: list) -> dict:
                 recomlist.append(book)
     
     finalrec = {}
-    for recom in recomlist:
-        if len(tagsinput)>0:
-            if any(x in tagsinput for x in booksDump[recom]["tags"]):
+    if len(recomlist)>0:
+        for recom in recomlist:
+            if len(tagsinput)>0:
+                if any(x in tagsinput for x in booksDump[recom]["tags"]):
+                    finalrec[recom] = booksDump[recom]
+            else:
                 finalrec[recom] = booksDump[recom]
-        else:
-            finalrec[recom] = booksDump[recom]
+    else:
+        finalrec["error"] = "No Recommendation Data!"
 
     return finalrec
 
