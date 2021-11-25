@@ -144,7 +144,7 @@ def AllBook() -> list:
 
 def searchIDfromName(q: str) -> str:
     if q in titleDump:
-        return titleDump.index(q)
+        return idDump[titleDump.index(q)]
     else:
         return ''
 
