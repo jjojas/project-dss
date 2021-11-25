@@ -42,7 +42,8 @@ class Main extends Form {
                 <Button id="tombol" variant="contained">Cari rekomendasi</Button>
             </form>
         </div>
-        );
+        )
+        ;
     }
 }
 
