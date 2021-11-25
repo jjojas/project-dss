@@ -26,7 +26,7 @@ for book in booksDump:
         if tag not in tagDump:
             tagDump.append(tag)
 
-def recommend(tagsinput: list,books: list) -> dict:
+def recommend(tagreceived: list,bookreceived: list) -> dict:
     '''
     Get JSON data of all the books that are recommended by the system
 
@@ -35,6 +35,15 @@ def recommend(tagsinput: list,books: list) -> dict:
     tags(list) : All the tags filtered by the user
     books(list) : All the books that read by the user
     '''
+    tagsinput = []
+    for tag in tagreceived:
+        if tag != "":
+            tagsinput.append(tag)
+
+    books = []
+    for book in bookreceived:
+        if book != "":
+            books.append(book)
 
     recomlist = []
     if len(books)>3:
@@ -143,8 +152,8 @@ def searchIDfromName(q: str) -> str:
 
 if __name__ == "__main__":
     # a  = ['love','classics']
-    # b1 = []
-    # b2 = ["20702993","5400850","819161"]
+    b1 = []
+    b2 = ["20702993","5400850","819161"]
     # c3 = ["364"]
     print(recommend(b1,b2))
     # print(recommend(a,b1))
